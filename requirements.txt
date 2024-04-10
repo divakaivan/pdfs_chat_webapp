@@ -7,5 +7,5 @@ huggingface_hub
 InstructorEmbedding
 sentence-transformers==2.2.2
 langchain-community
-pymongo[srv]==3.6
+pymongo
 transformers
