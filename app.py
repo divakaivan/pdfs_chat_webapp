@@ -9,7 +9,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import os
 from dotenv import load_dotenv
 load_dotenv()
-
+device = 'cuda'
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
@@ -129,7 +129,7 @@ def handle_userinput(query):
         }
     ]
     prompt = tokenizer.apply_chat_template(conversation=dialogue_template, tokenize=False, add_generation_prompt=True)
-    input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to("mps")
+    input_ids = tokenizer(prompt, return_tensors="pt").to("cuda")
     response = model.generate(**input_ids, max_new_tokens=500, temperature=0.7, do_sample=True)
     text = tokenizer.decode(response[0])
     st.write(user_template.replace(
@@ -144,7 +144,7 @@ def handle_userinput(query):
 
 model_id = 'google/gemma-2b'
 tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = AutoModelForCausalLM.from_pretrained(model_id).to('mps')
+model = AutoModelForCausalLM.from_pretrained(model_id).to(device)
 
 
 def main():
